@@ -103,7 +103,35 @@ namespace CalculatorAndGuessTheNum
         {
             Console.WriteLine("\n======= Guess the Number Game =======");
 
-            // Generate a random number between 1 and 100
+            Console.WriteLine("Please select level:");
+            Console.WriteLine("1. Easy (10 attempts)");
+            Console.WriteLine("2. Medium (7 attempts)");
+            Console.WriteLine("3. Hard (5 attempts)");
+
+            int difficultyChoice;
+            while (!int.TryParse(Console.ReadLine(), out difficultyChoice) || difficultyChoice < 1 || difficultyChoice > 3)
+            {
+                Console.Write("Invalid input. Enter a number between 1 and 3: ");
+            }
+
+            int maxAttempts;
+            switch (difficultyChoice)
+            {
+                case 1:
+                    maxAttempts = 10;
+                    break;
+                case 2:
+                    maxAttempts = 7;
+                    break;
+                case 3:
+                    maxAttempts = 5;
+                    break;
+                default:
+                    maxAttempts = 10; // if inavlid input is entered level will be set to easy
+                    break;
+            }
+
+
             Random random = new Random();
             int secretNumber = random.Next(1, 101);
 
@@ -112,7 +140,7 @@ namespace CalculatorAndGuessTheNum
 
             do
             {
-                Console.Write("Enter your guess (1-100): ");
+                Console.Write($"Enter your guess (1-100, {maxAttempts - attempts } attempts remaining): ");
 
                 while (!int.TryParse(Console.ReadLine(), out guess) || guess < 1 || guess > 100)
                 {
@@ -123,18 +151,24 @@ namespace CalculatorAndGuessTheNum
 
                 if (guess < secretNumber)
                 {
-                    Console.WriteLine("Too low! Try again.");
+                    Console.WriteLine("Too low. Please try again.");
                 }
                 else if (guess > secretNumber)
                 {
-                    Console.WriteLine("Too high! Try again.");
+                    Console.WriteLine("Too high. Please try again.");
                 }
                 else
                 {
                     Console.WriteLine($"Congratulations! You guessed the correct number {secretNumber} in {attempts} attempts.");
                 }
 
-            } while (guess != secretNumber);
+            } while (guess != secretNumber && attempts < maxAttempts);
+
+            if (attempts >= maxAttempts)
+            {
+                Console.WriteLine($"Sorry, no more attempts. The correct number was {secretNumber}.");
+            }
         }
+    
     }
 }
